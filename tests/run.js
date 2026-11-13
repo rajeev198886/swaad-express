@@ -55,7 +55,13 @@ check("Every price after the ₹ sign is a real number", () => {
 
 check("The cart total equals the sum of the items", () => {
   const sample = { 1: 2, 4: 1, 8: 3 };           // 2 x Indori Thali, 1 x Chicken Biryani, 3 x Samosa
-  const byHand = cart.priceValue(MENU[0].price) * 2 + cart.priceValue(MENU[3].price) * 1 + cart.priceValue(MENU[7].price) * 3;
+  // Resolve items by ID: array positions can change when menu entries are added or reordered.
+  const priceFor = (id) => {
+    const item = MENU.find((dish) => dish.id === id);
+    if (!item) throw new Error(`Menu item with ID ${id} is missing`);
+    return cart.priceValue(item.price);
+  };
+  const byHand = priceFor(1) * 2 + priceFor(4) + priceFor(8) * 3;
   const total = cart.cartTotal(sample, MENU);
   const lines = cart.cartLines(sample, MENU).reduce((s, l) => s + l.lineTotal, 0);
   if (total !== byHand) return `The cart says ${money(total)} but adding the items by hand gives ${money(byHand)}.`;
@@ -112,7 +118,7 @@ if (!cr2Started) {
   });
   check("CR2: GST is shown on its own line on the bill", () => {
     const html = render.renderBill(bill);
-    const lines = (html.match(/<div class="bill-line[^"]*">.*?<\/div>/g) || []);
+    const lines = (html.match(/<div class="bill-line[^\"]*">.*?<\/div>/g) || []);
     const gstLine = lines.find((l) => /GST/.test(l));
     if (!gstLine) return `The bill has no separate line that says GST. Add a "GST" line between the food total and the grand total.`;
     if (!gstLine.includes(money(Number(bill.gst)))) return `The GST line does not show the GST amount ${money(Number(bill.gst))}.`;
