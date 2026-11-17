@@ -1,7 +1,7 @@
 // SWAAD EXPRESS CART AND BILL LOGIC
 // The cart is a plain object: { dishId: quantity }.
 
-const MAX_PER_DISH = 10;
+const MAX_PER_DISH = 99;
 
 // "₹249" -> 249
 function priceValue(price) {
@@ -39,6 +39,20 @@ function cartTotal(cart, menu) {
   return lines.reduce((sum, line) => sum + line.lineTotal, 0);
 }
 
+// Calculates food total, 5% GST, and grand total for the bill
+function billSummary(cart, menu) {
+  const food = cartTotal(cart, menu);
+  const gstRate = 0.05;
+  const gst = Number((food * gstRate).toFixed(2));
+  const total = Number((food + gst).toFixed(2));
+  return {
+    food,
+    gstRate,
+    gst,
+    total
+  };
+}
+
 if (typeof module !== "undefined") {
   module.exports = {
     MAX_PER_DISH,
@@ -46,6 +60,7 @@ if (typeof module !== "undefined") {
     addToCart,
     changeQty,
     cartLines,
-    cartTotal
+    cartTotal,
+    billSummary
   };
 }
