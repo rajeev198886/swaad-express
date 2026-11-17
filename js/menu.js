@@ -3,7 +3,7 @@
 // RULE 1: every price is text that starts with the rupee sign, for example "₹249".
 // (CR1 later adds one more field to every dish: veg: true or veg: false.)
 const MENU = [
-  { id: 1,  category: "Thali",    name: "Indori Veg Thali",      emoji: "🍛", price: "₹249" },
+  { id: 1,  category: "Thali",    name: "Indori Veg Thali",      emoji: "🍛", price: "₹249", veg: true },
   { id: 2,  category: "Thali",    name: "Maharaja Thali",        emoji: "🍽️", price: "₹349" },
   { id: 3,  category: "Thali",    name: "Kadhai Paneer Thali",   emoji: "🍛", price: "₹279" },
   { id: 4,  category: "Biryani",  name: "Chicken Biryani",       emoji: "🍚", price: "₹329" },
