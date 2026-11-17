@@ -1,7 +1,7 @@
 // SWAAD EXPRESS CART AND BILL LOGIC
 // The cart is a plain object: { dishId: quantity }.
 
-const MAX_PER_DISH = 99;
+const MAX_PER_DISH = 10;
 
 // "₹249" -> 249
 function priceValue(price) {
@@ -21,13 +21,13 @@ function changeQty(cart, id, delta) {
   return cart;
 }
 
-// Turns the cart into rows: dish, quantity, line total.
+// Turns the cart into rows: item, quantity, line total.
 function cartLines(cart, menu) {
   return Object.entries(cart).map(([id, qty]) => {
     const dish = menu.find(item => item.id == id);
     const price = dish ? priceValue(dish.price) : 0;
     return {
-      dish,
+      item: dish,
       qty,
       lineTotal: price * qty
     };
@@ -36,8 +36,7 @@ function cartLines(cart, menu) {
 
 function cartTotal(cart, menu) {
   const lines = cartLines(cart, menu);
-  const total = lines.reduce((sum, line) => sum + line.lineTotal, 0);
-  return `₹${total.toFixed(2)}`;
+  return lines.reduce((sum, line) => sum + line.lineTotal, 0);
 }
 
 if (typeof module !== "undefined") {
